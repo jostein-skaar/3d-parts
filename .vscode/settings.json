@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "jkillian.custom-local-formatters",
+
+  "customLocalFormatters.formatters": [
+    {
+      "command": "clang-format",
+      "languages": ["scad"]
+    }
+  ]
+}

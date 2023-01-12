@@ -1,0 +1,9 @@
+BasedOnStyle: LLVM
+ColumnLimit: 160
+SortIncludes: true
+IndentWidth: 2
+AccessModifierOffset: -4
+ContinuationIndentWidth: 2
+TabWidth: 2
+UseTab: Never
+BreakBeforeBraces: Allman
