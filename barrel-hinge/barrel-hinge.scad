@@ -3,15 +3,18 @@ include<BOSL2\structs.scad>;
 
 $fn = 64;
 printer = "default";
-part = "barrel"; // arm, barrel, pins
+part = "preview"; // preview, arm, barrel, pins
 barrel_d = 25;
 height = 20;
 hole_d = 3;
 pin_d = hole_d;
 arm_svg = "barrel-hinge-arm-25.svg";
 arm_thickness = 2.0;
-has_flat_side = true;
+number_of_arms = 4;
+has_flat_side = false;
 is_closed = true;
+
+// TODO: Find a way to resize arms and barrel in a way that works.
 
 // Getting the parts to match on your printer (calibrating flow etc may also help).
 // I have two printers that I need to adjust some parts for.
@@ -26,9 +29,6 @@ $printer_adjust_arm_thickness = ADJUSTMENTS_FOR_PRINTER("arm_thickness", printer
 // echo_struct(PRINTER_ADJUSTMENTS);
 echo("Adjustments", printer, $printer_adjust_pin_d, $printer_adjust_arm_thickness);
 
-// Choose between 4 or 6 arms
-number_of_arms = 4;
-
 if (part == "arm")
 {
   arm(thickness = arm_thickness, svg = arm_svg);
@@ -41,6 +41,15 @@ else if (part == "barrel")
 else if (part == "pins")
 {
   pins(barrel_d = barrel_d, pin_d = pin_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness, has_flat_side = has_flat_side);
+}
+else if (part == "preview")
+{
+  left(20) arm(thickness = arm_thickness, svg = arm_svg);
+
+  barrel(barrel_d = barrel_d, height = height, hole_d = hole_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness, has_flat_side = has_flat_side,
+         is_closed = is_closed);
+
+  fwd(20) pins(barrel_d = barrel_d, pin_d = pin_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness, has_flat_side = has_flat_side);
 }
 
 module barrel(barrel_d, height, hole_d, number_of_arms, arm_thickness, has_flat_side = false, is_closed = false)
