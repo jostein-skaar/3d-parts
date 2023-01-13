@@ -3,14 +3,15 @@ include<BOSL2\structs.scad>;
 
 $fn = 64;
 printer = "default";
-part = "barrel";
+part = "barrel"; // arm, barrel, pins
 barrel_d = 25;
 height = 20;
 hole_d = 3;
 pin_d = hole_d;
 arm_svg = "barrel-hinge-arm-25.svg";
 arm_thickness = 2.0;
-has_flat_side = false;
+has_flat_side = true;
+is_closed = true;
 
 // Getting the parts to match on your printer (calibrating flow etc may also help).
 // I have two printers that I need to adjust some parts for.
@@ -34,14 +35,15 @@ if (part == "arm")
 }
 else if (part == "barrel")
 {
-  barrel(barrel_d = barrel_d, height = height, hole_d = hole_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness, has_flat_side = has_flat_side);
+  barrel(barrel_d = barrel_d, height = height, hole_d = hole_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness, has_flat_side = has_flat_side,
+         is_closed = is_closed);
 }
 else if (part == "pins")
 {
   pins(barrel_d = barrel_d, pin_d = pin_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness, has_flat_side = has_flat_side);
 }
 
-module barrel(barrel_d, height, hole_d, number_of_arms, arm_thickness, has_flat_side = false)
+module barrel(barrel_d, height, hole_d, number_of_arms, arm_thickness, has_flat_side = false, is_closed = false)
 {
   difference()
   {
@@ -59,8 +61,8 @@ module barrel(barrel_d, height, hole_d, number_of_arms, arm_thickness, has_flat_
     arm_margin_front = 3;
     arm_margin_back = 1;
     arm_space = hole_d + arm_margin_front + arm_margin_back;
-    close_arm_attachments_of_barrel = true;
-    inset_for_closing_arm_attachments_of_barrel = close_arm_attachments_of_barrel ? 2 : 0;
+
+    inset_for_closing_arm_attachments_of_barrel = is_closed ? 2 : 0;
     left(left_arm_position) fwd(barrel_d / 4 - inset_for_closing_arm_attachments_of_barrel) up(height - arm_space)
     {
       number_of_holes = number_of_arms / 2;
@@ -71,7 +73,8 @@ module barrel(barrel_d, height, hole_d, number_of_arms, arm_thickness, has_flat_
     }
 
     // This fwd and xrot are just trial and error to make good room for the arm when in closed position
-    fwd(2) xrot(-6)
+    // #fwd(2) xrot(-6)
+    fwd(2.4) xrot(-7)
     {
 
       // Space for arms
@@ -96,7 +99,41 @@ module barrel(barrel_d, height, hole_d, number_of_arms, arm_thickness, has_flat_
 module arm(thickness, svg)
 {
   thickness_adjusted = thickness + $printer_adjust_arm_thickness;
-  linear_extrude(height = thickness_adjusted) import(svg);
+
+  path = [ [ 0, 0 ], [ -11, 2 ], [ -11, 10 ], [ -8, 15 ], [ -6, 20 ], [ 0, 20 ] ];
+  holes = [ path[0], path[3], path[5] ];
+
+  difference()
+  {
+    union()
+    {
+      linear_extrude(height = thickness_adjusted, $fn = 16) stroke(path, width = 3, joints = "dot", joint_width = 1);
+      for (hole = holes)
+      {
+        right(hole[0]) back(hole[1]) arm_hole(thickness);
+      }
+    }
+
+    for (hole = holes)
+    {
+      right(hole[0]) back(hole[1]) arm_hole(thickness, is_mask = true);
+    }
+  }
+}
+
+module arm_hole(thickness, is_mask = false)
+{
+  thickness_adjusted = thickness + $printer_adjust_arm_thickness;
+
+  if (is_mask)
+  {
+
+    cyl(d = hole_d, h = thickness_adjusted, anchor = BOT, $fn = 16);
+  }
+  else
+  {
+    cyl(d = hole_d + 0.8 * 2, h = thickness_adjusted, anchor = BOT, $fn = 16);
+  }
 }
 
 module pins(barrel_d, pin_d, number_of_arms, arm_thickness, has_flat_side = false)
@@ -113,10 +150,18 @@ module pins(barrel_d, pin_d, number_of_arms, arm_thickness, has_flat_side = fals
   xcyl(d = pin_d_adjusted, h = length_pin_center, anchor = BOT);
 
   // Two inside barrel
-  fwd(5) xcyl(d = pin_d_adjusted, h = length_pin_barrel_inside, anchor = BOT);
-  fwd(10) xcyl(d = pin_d_adjusted, h = length_pin_barrel_inside, anchor = BOT);
+  for (offset = [ 5, 10 ])
+  {
+    fwd(offset)
+    {
+      xcyl(d = pin_d_adjusted, h = length_pin_barrel_inside, anchor = BOT);
+      left(arm_thickness / 2) up(pin_d_adjusted / 2) cuboid([ arm_thickness, pin_d_adjusted, 2 ], anchor = BOT);
+    }
+  }
 
   // Two outside barrel
-  fwd(15) xcyl(d = pin_d_adjusted, h = length_pin_barrel_outside, anchor = BOT);
-  fwd(20) xcyl(d = pin_d_adjusted, h = length_pin_barrel_outside, anchor = BOT);
+  for (offset = [ 15, 20 ])
+  {
+    fwd(offset) xcyl(d = pin_d_adjusted, h = length_pin_barrel_outside, anchor = BOT);
+  }
 }
