@@ -1,5 +1,5 @@
 // clang-format off
-include<../src/barrel-hinge.scad>;
+include<../../src/barrel-hinge.scad>;
 // clang-format on
 
 $fn = 64;
