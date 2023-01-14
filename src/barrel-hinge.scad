@@ -2,7 +2,7 @@
 include<common.scad>;
 // clang-format on
 
-// The following can be adjusted for better fit when 3D printing using $printer_adjustments:
+// The following can be adjusted for better fit when 3D printing using $barrel_hinge_printer_adjustments:
 // hole_d: To make the hole more narrow or wide (minus makes it more narrow)
 // pin_d: To make the pin thinner or thicker (minus makes it thinner)
 // arm_thickness_positive: To make the arm thinner or thicker (minus makes it thinner)
@@ -25,8 +25,8 @@ is_closed = true;
 module barrel_hinge(barrel_d = barrel_d, height = height, hole_d = hole_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness,
                     has_flat_side = false, is_closed = false)
 {
-  printer_adjust_arm_thickness_negative = get_printer_adjustment("arm_thickness_negative");
-  printer_adjust_hole_d = get_printer_adjustment("hole_d");
+  printer_adjust_arm_thickness_negative = barrel_hinge_get_printer_adjustment("arm_thickness_negative");
+  printer_adjust_hole_d = barrel_hinge_get_printer_adjustment("hole_d");
   echo("printer_adjust_arm_thickness_negative and printer_adjust_hole_d", printer_adjust_arm_thickness_negative, printer_adjust_hole_d);
   hole_d_adjusted = hole_d + printer_adjust_hole_d;
   arm_thickness_adjusted = arm_thickness + printer_adjust_arm_thickness_negative;
@@ -83,8 +83,8 @@ module barrel_hinge(barrel_d = barrel_d, height = height, hole_d = hole_d, numbe
 
 module barrel_hinge_arm(arm_thickness = arm_thickness)
 {
-  printer_adjust_arm_thickness_positive = get_printer_adjustment("arm_thickness_positive");
-  printer_adjust_hole_d = get_printer_adjustment("hole_d");
+  printer_adjust_arm_thickness_positive = barrel_hinge_get_printer_adjustment("arm_thickness_positive");
+  printer_adjust_hole_d = barrel_hinge_get_printer_adjustment("hole_d");
   echo("printer_adjust_arm_thickness_positive and printer_adjust_hole_d", printer_adjust_arm_thickness_positive, printer_adjust_hole_d);
 
   hole_d_adjusted = hole_d + printer_adjust_hole_d;
@@ -127,8 +127,8 @@ module barrel_hinge_arm(arm_thickness = arm_thickness)
 
 module barrel_hinge_pins(barrel_d = barrel_d, pin_d = pin_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness, has_flat_side = false)
 {
-  printer_adjust_arm_thickness_positive = get_printer_adjustment("arm_thickness_positive");
-  printer_adjust_pin_d = get_printer_adjustment("pin_d");
+  printer_adjust_arm_thickness_positive = barrel_hinge_get_printer_adjustment("arm_thickness_positive");
+  printer_adjust_pin_d = barrel_hinge_get_printer_adjustment("pin_d");
   echo("printer_adjust_arm_thickness_positive and printer_adjust_pin_d", printer_adjust_arm_thickness_positive, printer_adjust_pin_d);
 
   arm_thickness_adjusted = arm_thickness + printer_adjust_arm_thickness_positive;
@@ -158,3 +158,5 @@ module barrel_hinge_pins(barrel_d = barrel_d, pin_d = pin_d, number_of_arms = nu
     fwd(offset) xcyl(d = pin_d_adjusted, h = length_pin_barrel_outside, anchor = BOT);
   }
 }
+
+function barrel_hinge_get_printer_adjustment(key) = get_printer_adjustment(key, $barrel_hinge_printer_adjustments);

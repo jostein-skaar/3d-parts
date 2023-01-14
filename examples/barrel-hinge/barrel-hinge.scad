@@ -20,7 +20,7 @@ is_closed = true;
 // I have two printers that I need to adjust some parts for.
 printer_adjustments_bambu = [ [ "hole_d", 0.4 ], [ "pin_d", 0.05 ], [ "arm_thickness_positive", 0.0 ] , ["arm_thickness_negative", 0.1] ];
 printer_adjustments_ender = [ [ "hole_d", 0.45 ], [ "pin_d", 0.0 ], [ "arm_thickness_positive", 0.0 ], ["arm_thickness_negative", 0.1] ];
-$printer_adjustments = 
+$barrel_hinge_printer_adjustments = 
   printer == "bambu" ? printer_adjustments_bambu : 
   printer == "ender" ? printer_adjustments_ender : 
   undef;
