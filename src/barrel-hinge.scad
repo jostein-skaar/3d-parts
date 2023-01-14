@@ -48,7 +48,7 @@ module barrel_hinge(barrel_d = barrel_d, height = height, hole_d = hole_d, numbe
     arm_margin_back = 1;
     arm_space = hole_d_adjusted + arm_margin_front + arm_margin_back;
 
-    inset_for_closing_arm_attachments_of_barrel = is_closed ? 1.2 : 0;
+    inset_for_closing_arm_attachments_of_barrel = is_closed ? 2 : 0;
     left(left_arm_position) fwd(barrel_d / 4 - inset_for_closing_arm_attachments_of_barrel) up(height - arm_space)
     {
       number_of_holes = number_of_arms / 2;
@@ -61,7 +61,6 @@ module barrel_hinge(barrel_d = barrel_d, height = height, hole_d = hole_d, numbe
     // This fwd and xrot are just trial and error to make good room for the arm when in closed position
     fwd(2.4) xrot(-7)
     {
-
       // Space for arms
       extra_room_back = 4;
       space_y = barrel_d - arm_space * 2 + extra_room_back;
@@ -90,7 +89,7 @@ module barrel_hinge_arm(arm_thickness = arm_thickness)
   hole_d_adjusted = hole_d + printer_adjust_hole_d;
   thickness_adjusted = arm_thickness + printer_adjust_arm_thickness_positive;
 
-  path = [ [ 0, 0 ], [ -10, 0 ], [ -13, 10 ], [ -8, 15 ], [ -8, 22 ], [ 0, 20.1 ] ];
+  path = [ [ 0, 0 ], [ -10, 0 ], [ -13, 10 ], [ -8, 17 ], [ -8, 26 ], [ 0, 24 ] ];
   holes = [ path[0], path[3], path[5] ];
 
   difference()
