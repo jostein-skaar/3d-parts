@@ -1,5 +1,6 @@
 // clang-format off
 include<../../src/barrel-hinge.scad>;
+include<barrel-hinge-printer-adjustments.scad>;
 // clang-format on
 
 $fn = 64;
@@ -7,7 +8,7 @@ $fn = 64;
 printer = "bambu";
 part = "preview"; // preview, arm, barrel, pins
 barrel_d = 25;
-height = 20;
+height = 25;
 hole_d = 3;
 pin_d = hole_d;
 arm_thickness = 2;
@@ -15,16 +16,7 @@ number_of_arms = 4;
 has_flat_side = false;
 is_closed = true;
 
-// clang-format off
-// Getting the parts to match on my printer.
-// I have two printers that I need to adjust some parts for.
-printer_adjustments_bambu = [ [ "hole_d", 0.4 ], [ "pin_d", 0.05 ], [ "arm_thickness_positive", 0.0 ] , ["arm_thickness_negative", 0.1] ];
-printer_adjustments_ender = [ [ "hole_d", 0.45 ], [ "pin_d", 0.0 ], [ "arm_thickness_positive", 0.0 ], ["arm_thickness_negative", 0.1] ];
-$barrel_hinge_printer_adjustments = 
-  printer == "bambu" ? printer_adjustments_bambu : 
-  printer == "ender" ? printer_adjustments_ender : 
-  undef;
-// clang-format on
+$barrel_hinge_printer_adjustments = barrel_hinge_get_printer_adjustments(printer);
 
 if (part == "arm")
 {
