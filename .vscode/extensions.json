@@ -1,6 +1,3 @@
 {
-    "recommendations": [
-        "jkillian.custom-local-formatters",
-        "antyos.openscad"
-    ]
+  "recommendations": ["jkillian.custom-local-formatters", "antyos.openscad"]
 }

@@ -20,7 +20,8 @@ arm_thickness = 2;
 arm_width = 3;
 arm_hole_wall = 1.2;
 
-extra_margin_front = 5;
+barrel_wall = 0;
+extra_margin_front = 0;
 extra_arm_length = 0;
 
 // More "set" variables
@@ -76,10 +77,10 @@ function barrel_hinge_calculate_barrel_height(hole_d_adjusted, arm_hole_wall) =
   + barrel_hinge_calculate_arm_hole_including_wall_d(hole_d_adjusted, arm_hole_wall)/2;
 
 function barrel_hinge_calculate_arm_space(hole_d_adjusted, arm_hole_wall) = 
-  hole_d_adjusted + arm_hole_wall * 2 + extra_margin_front;
+  hole_d_adjusted + arm_hole_wall * 2 + extra_margin_front+ barrel_wall;
 
 function barrel_hinge_calculate_arm_space_height(hole_d_adjusted, arm_hole_wall) = 
-  hole_d_adjusted + arm_hole_wall * 2 + extra_margin_front;
+  hole_d_adjusted + arm_hole_wall * 2 + extra_margin_front + extra_arm_length;
 
 function barrel_hinge_calculate_space(hole_d_adjusted, arm_hole_wall) = 
   barrel_hinge_calculate_left_part_of_arm_length(hole_d_adjusted, arm_hole_wall);
@@ -90,7 +91,8 @@ function barrel_hinge_calculate_arm_hole_including_wall_d(hole_d_adjusted, arm_h
 function barrel_hinge_calculate_right_part_of_arm_length(hole_d_adjusted, arm_hole_wall) = 
   hole_d_adjusted / 2 + arm_hole_wall 
   + barrel_hinge_calculate_arm_hole_including_wall_d(hole_d_adjusted, arm_hole_wall) / 2
-  +extra_margin_front;
+  + extra_margin_front + extra_arm_length
+  + barrel_wall*0;
 
 function barrel_hinge_calculate_left_part_of_arm_length(hole_d_adjusted, arm_hole_wall) = 
   barrel_hinge_calculate_right_part_of_arm_length(hole_d_adjusted, arm_hole_wall) 
@@ -105,7 +107,7 @@ module barrel_hinge(barrel_d = undef, height = undef, number_of_arms = number_of
 
   calculated_barrel_d = barrel_hinge_calculate_barrel_d(hole_d_adjusted, arm_hole_wall);
   echo("calculated_barrel_d", calculated_barrel_d);
-  wanted_barrel_d = is_def(barrel_d) ? barrel_d : calculated_barrel_d;
+  wanted_barrel_d = is_def(barrel_d) ? barrel_d : calculated_barrel_d + barrel_wall * 2;
   diff_d = wanted_barrel_d - calculated_barrel_d;
 
   calculated_height = barrel_hinge_calculate_barrel_height(hole_d_adjusted, arm_hole_wall);
@@ -136,7 +138,7 @@ module barrel_hinge_mask(height = undef, number_of_arms = number_of_arms, hole_d
   space_width = arm_thickness_adjusted * number_of_arms;
   space_length = barrel_hinge_calculate_space(hole_d_adjusted, arm_hole_wall);
   space_height = wanted_height;
-  hole_length = 30;
+  hole_length = 100;
 
   slider_space_width = space_width + arm_thickness_adjusted * 2 + 0.2;
   slider_space_length = hole_d_adjusted + 0.2;
@@ -160,7 +162,9 @@ module barrel_hinge_mask(height = undef, number_of_arms = number_of_arms, hole_d
     {
       cuboid([ space_width, space_length, space_height ]);
 
-      fwd(slider_position_all_the_way_in_front) up(space_height / 2 - 6 / 2) cuboid([ slider_space_width, slider_space_length, 6 ]);
+      // fwd(slider_position_all_the_way_in_front) up(space_height / 2 - 6 / 2) cuboid([ slider_space_width, slider_space_length, 6 ]);
+      // fwd(slider_fwd_position) cuboid([ slider_space_width, slider_space_length, space_height ]);
+      fwd(slider_position_all_the_way_in_front) cuboid([ slider_space_width, slider_space_length, space_height ]);
       fwd(slider_fwd_position) cuboid([ slider_space_width, slider_space_length, space_height ]);
       fwd(slider_fwd_position - extra_margin_front) cuboid([ slider_space_width, slider_space_length, space_height ]);
 
@@ -175,10 +179,10 @@ module barrel_hinge_mask(height = undef, number_of_arms = number_of_arms, hole_d
           }
         }
       }
-#up(space_height / 2 - arms_space_height + hole_d_adjusted / 2 + arm_hole_wall)
-      fwd(space_length / 2 + arms_space_length - hole_d_adjusted / 2 - arm_hole_wall - extra_margin_front) xcyl(d = hole_d_adjusted, h = hole_length);
-#up(space_height / 2 - arms_space_height + hole_d_adjusted / 2 + arm_hole_wall)
-      fwd(space_length / 2 + arms_space_length - hole_d_adjusted / 2 - arm_hole_wall) xcyl(d = hole_d_adjusted, h = hole_length);
+      up(space_height / 2 - arms_space_height + hole_d_adjusted / 2 + arm_hole_wall)
+        fwd(space_length / 2 + arms_space_length - hole_d_adjusted / 2 - arm_hole_wall - extra_margin_front) xcyl(d = hole_d_adjusted, h = hole_length);
+      // #up(space_height / 2 - arms_space_height + hole_d_adjusted / 2 + arm_hole_wall)
+      //       fwd(space_length / 2 + arms_space_length - hole_d_adjusted / 2 - arm_hole_wall) xcyl(d = hole_d_adjusted, h = hole_length);
     }
 
     children();
@@ -306,7 +310,7 @@ module barrel_hinge_arm(hole_d = hole_d, arm_thickness = arm_thickness, arm_widt
   }
 }
 
-module barrel_hinge_pins(barrel_d = barrel_d, pin_d = pin_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness)
+module barrel_hinge_pins(hole_d = hole_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness)
 {
   printer_adjust_arm_thickness_positive = barrel_hinge_get_printer_adjustment("arm_thickness_positive");
   printer_adjust_pin_d = barrel_hinge_get_printer_adjustment("pin_d");
@@ -318,7 +322,7 @@ module barrel_hinge_pins(barrel_d = barrel_d, pin_d = pin_d, number_of_arms = nu
   length_pin_barrel_inside = arm_thickness * number_of_arms + 3.2;
   length_pin_barrel_outside = arm_thickness * number_of_arms + 6;
 
-  pin_d_adjusted = pin_d + printer_adjust_pin_d;
+  pin_d_adjusted = hole_d + printer_adjust_pin_d;
 
   // One center pin
   xcyl(d = pin_d_adjusted, h = length_pin_center, anchor = BOT);

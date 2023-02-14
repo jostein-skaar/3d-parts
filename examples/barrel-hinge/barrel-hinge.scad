@@ -18,14 +18,21 @@ else if (part == "barrel")
 {
   // barrel_hinge(barrel_d = barrel_d, height = height, hole_d = hole_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness,
   //              has_flat_side = has_flat_side, is_closed = is_closed);
-
   barrel_hinge();
+}
+else if (part == "pins")
+{
+  // barrel_hinge(barrel_d = barrel_d, height = height, hole_d = hole_d, number_of_arms = number_of_arms, arm_thickness = arm_thickness,
+  //              has_flat_side = has_flat_side, is_closed = is_closed);
+  barrel_hinge_pins();
 }
 else if (part == "preview")
 {
   barrel_hinge_arm();
 
   fwd(40) barrel_hinge();
+
+  back(40) barrel_hinge_pins();
 }
 
 // barrel_d = 15;
