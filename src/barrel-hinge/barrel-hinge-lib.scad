@@ -26,7 +26,7 @@ module barrel_hinge(barrel_d, height, number_of_arms, hole_d, arm_thickness, arm
   assert(height > calculated_height, str("height must be larger than calculated_height: ", calculated_height));
   diff_height = height - calculated_height;
 
-  down(diff_height) diff() cyl(d = barrel_d, h = height, anchor = BOT)
+  diff() cyl(d = barrel_d, h = height, anchor = BOT)
   {
     fwd(diff_d / 2) tag("remove") attach(CENTER)
       barrel_hinge_mask(height = height, number_of_arms = number_of_arms, hole_d = hole_d, arm_thickness = arm_thickness, arm_width = arm_width,
@@ -51,8 +51,10 @@ module barrel_hinge_mask(height, number_of_arms, hole_d, arm_thickness, arm_widt
   space_length = barrel_hinge_calculate_space(hole_d_adjusted, arm_hole_wall, extra_margin_front, extra_arm_length);
   space_height = wanted_height;
 
-  slider_space_width = space_width + arm_thickness_adjusted * 2 + 0.2;
-  slider_space_length = hole_d_adjusted + 0.2;
+  slider_wiggle_room_width = 0.2;
+  slider_wiggle_room_length = 0.05;
+  slider_space_width = space_width + arm_thickness_adjusted * 2 + slider_wiggle_room_width;
+  slider_space_length = hole_d_adjusted + slider_wiggle_room_length;
 
   arms_space_length = barrel_hinge_calculate_arm_space(hole_d_adjusted, arm_hole_wall, extra_margin_front);
   arms_space_height = barrel_hinge_calculate_arm_space_height(hole_d_adjusted, arm_hole_wall, extra_margin_front, extra_arm_length);
@@ -61,8 +63,8 @@ module barrel_hinge_mask(height, number_of_arms, hole_d, arm_thickness, arm_widt
 
   // These are the result of some trial and error.
   // TODO: Find a way to calculate them better.
-  slider_position_top = space_length / 2 - slider_space_length / 2 - arm_hole_wall;
-  slider_position_bottom = slider_position_top - arm_hole_wall / 2;
+  slider_position_top = space_length / 2 - slider_space_length / 2 - arm_hole_wall - 0.4;
+  slider_position_bottom = space_length / 2 - slider_space_length / 2 - arm_hole_wall - 1.0;
 
   echo("space_length + arms_space_length", space_length, arms_space_length);
 
