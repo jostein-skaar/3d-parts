@@ -11,7 +11,7 @@ printer = "bambu";
 $barrel_hinge_printer_adjustments = barrel_hinge_get_printer_adjustments(printer);
 echo("$barrel_hinge_printer_adjustments", printer, $barrel_hinge_printer_adjustments);
 
-part = "special"; // preview, arm, barrel, pins
+part = "preview"; // preview, arm, barrel, pins
 
 // Small
 barrel_d = 24;
