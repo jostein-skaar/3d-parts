@@ -14,26 +14,26 @@ echo("$barrel_hinge_printer_adjustments", printer, $barrel_hinge_printer_adjustm
 part = "preview"; // preview, arm, barrel, pins
 
 // Small
-// barrel_d = 24;
-// height = 20;
-// hole_d = 3;
-// number_of_arms = 4;
-// arm_thickness = 2;
-// arm_width = 3;
-// arm_hole_wall = 1.2;
-// extra_margin_front = 2;
-// extra_arm_length = 0;
+barrel_d = 24;
+height = 20;
+hole_d = 3;
+number_of_arms = 4;
+arm_thickness = 2;
+arm_width = 3;
+arm_hole_wall = 1.2;
+extra_margin_front = 2;
+extra_arm_length = 0;
 
 // Large
-barrel_d = 55;
-height = 45;
-hole_d = 8;
-number_of_arms = 6;
-arm_thickness = 4;
-arm_width = 6;
-arm_hole_wall = 3;
-extra_margin_front = 3;
-extra_arm_length = 0;
+// barrel_d = 55;
+// height = 45;
+// hole_d = 8;
+// number_of_arms = 6;
+// arm_thickness = 4;
+// arm_width = 6;
+// arm_hole_wall = 3;
+// extra_margin_front = 3;
+// extra_arm_length = 0;
 
 if (part == "barrel")
 {
