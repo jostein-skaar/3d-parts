@@ -52,7 +52,7 @@ module barrel_hinge_mask(height, number_of_arms, hole_d, arm_thickness, arm_widt
   space_height = wanted_height;
 
   slider_wiggle_room_width = 0.2;
-  slider_wiggle_room_length = 0.05;
+  slider_wiggle_room_length = 0.0;
   slider_space_width = space_width + arm_thickness_adjusted * 2 + slider_wiggle_room_width;
   slider_space_length = hole_d_adjusted + slider_wiggle_room_length;
 
@@ -61,12 +61,13 @@ module barrel_hinge_mask(height, number_of_arms, hole_d, arm_thickness, arm_widt
 
   left_arm_position = arm_thickness_adjusted * number_of_arms / 2 - arm_thickness_adjusted / 2;
 
-  // These are the result of some trial and error.
-  // TODO: Find a way to calculate them better.
-  slider_position_top = space_length / 2 - slider_space_length / 2 - arm_hole_wall - 0.4;
-  slider_position_bottom = space_length / 2 - slider_space_length / 2 - arm_hole_wall - 1.0;
-
-  echo("space_length + arms_space_length", space_length, arms_space_length);
+  relative_position_hole_for_pin = space_length / 2 + arms_space_length - hole_d_adjusted / 2 - arm_hole_wall - extra_margin_front;
+  arm_left_part = barrel_hinge_calculate_left_part_of_arm_length(hole_d_adjusted, arm_hole_wall, extra_margin_front, extra_arm_length);
+  arm_right_part = barrel_hinge_calculate_right_part_of_arm_length(hole_d_adjusted, arm_hole_wall, extra_margin_front, extra_arm_length);
+  diff_left_to_right = arm_left_part - arm_right_part;
+  slider_position_top = relative_position_hole_for_pin - diff_left_to_right;
+  // This seems to work for multiple sizes
+  slider_position_bottom = slider_position_top - arm_width / 2;
 
   attachable(anchor = anchor, spin = spin, orient = orient, size = [ space_width, space_length + arms_space_length, space_height ])
   {

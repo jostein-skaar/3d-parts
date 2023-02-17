@@ -21,7 +21,7 @@ number_of_arms = 4;
 arm_thickness = 2;
 arm_width = 3;
 arm_hole_wall = 1.2;
-extra_margin_front = 2;
+extra_margin_front = 1;
 extra_arm_length = 0;
 
 // Large
@@ -53,7 +53,9 @@ else if (part == "pins")
 }
 else if (part == "special")
 {
-  barrel_hinge_special();
+  // barrel_hinge_special();
+  barrel_hinge_arm(hole_d = hole_d, arm_thickness = arm_thickness, arm_width = arm_width, arm_hole_wall = arm_hole_wall, extra_margin_front = 0,
+                   extra_arm_length = extra_arm_length);
 }
 else if (part == "preview")
 {
