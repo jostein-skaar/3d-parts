@@ -12,7 +12,7 @@ echo("$brick_printer_adjustments", printer, $brick_printer_adjustments);
 
 tightness = BRICK_TIGHTNESS_DEFAULT;
 
-part = "plate";
+part = "name";
 
 size_reward = 1;
 age = 9;
@@ -32,6 +32,15 @@ if (part == "plate")
     brick(width, length, height, is_closed = is_closed, is_tile = is_tile, anchor = BOT, $tightness = tightness);
     ycopies(spacing = physical_length - d_magnet - 4) { cyl(d = d_magnet, h = h_magnet, anchor = BOT); }
   }
+}
+else if (part == "name")
+{
+  width = 2;
+  length = 2;
+  height = 1 / 2;
+  is_closed = false;
+  is_tile = true;
+  brick(width, length, height, is_closed = is_closed, is_tile = is_tile, anchor = BOT, $tightness = tightness);
 }
 else if (part == "reward")
 {
