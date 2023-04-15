@@ -1,5 +1,5 @@
 // clang-format off
-include<common.scad>;
+include<../common.scad>;
 // clang-format on
 
 size_of_belt_percent = 0.1;
