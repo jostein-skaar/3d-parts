@@ -12,10 +12,14 @@ echo("$brick_printer_adjustments", printer, $brick_printer_adjustments);
 
 tightness = BRICK_TIGHTNESS_DEFAULT;
 
-part = "name";
+part = "reward";
+
+age = 9;
+letter = "A";
+
+reward_height = 0.823;
 
 size_reward = 1;
-age = 9;
 
 if (part == "plate")
 {
@@ -37,32 +41,41 @@ else if (part == "name")
 {
   width = 2;
   length = 2;
-  height = 1 / 2;
+  height = reward_height;
   is_closed = false;
   is_tile = true;
+  physical_size = BRICK_CALCULATE_PHYSICAL_LENGTH(width);
+  physical_height = BRICK_CALCULATE_PHYSICAL_HEIGHT(height);
+  echo(physical_height, BRICK_CALCULATE_PHYSICAL_LENGTH(1));
+  up(physical_height) create_letter(letter, physical_size - 1, 1);
   brick(width, length, height, is_closed = is_closed, is_tile = is_tile, anchor = BOT, $tightness = tightness);
+
+  physical_height_extra_studs = BRICK_CALCULATE_PHYSICAL_HEIGHT(0.1);
+
+  back(physical_size / 2 - physical_height_extra_studs / 2) xrot(-90)
+    brick(2, 1, 0.1, is_closed = true, is_tile = false, anchor = BACK, $tightness = tightness);
 }
 else if (part == "reward")
 {
   width = 2;
   length = size_reward;
-  height = 1 / 2;
+  height = reward_height;
   is_closed = false;
   is_tile = true;
   brick(width, length, height, is_closed = is_closed, is_tile = is_tile, anchor = BOT, $tightness = tightness);
 }
 else if (part == "reward-extra")
 {
-  tightness = BRICK_TIGHTNESS_LOOSE;
   width = 2;
   length = size_reward;
-  height = 1 / 2;
+  height = reward_height;
   is_closed = false;
   is_tile = false;
   brick(width, length, height, is_closed = is_closed, is_tile = is_tile, anchor = BOT, $tightness = tightness);
 }
 else if (part == "reward-cylinder")
 {
+  // Alternative proposition that is not in use.
   width = 2;
   length = 2;
   height = 1;
@@ -78,4 +91,10 @@ else if (part == "reward-cylinder")
       tag("remove") position(BOT) cyl(d = id, h = 5, anchor = BOT);
     }
   }
+}
+
+module create_letter(text, size, height)
+{
+  font = "Liberation Mono:style=Bold";
+  linear_extrude(height = height) { text(text, size = size, font = font, halign = "center", valign = "center", $fn = 16); }
 }

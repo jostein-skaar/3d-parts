@@ -1,3 +1,9 @@
+openscad -D "part=\""name\"";letter=\""A\"";printer=\""bambu\""" -o ../../stl/misc/reward-system/bambu_reward-system-name-A.stl reward-system.scad
+openscad -D "part=\""name\"";letter=\""E\"";printer=\""bambu\""" -o ../../stl/misc/reward-system/bambu_reward-system-name-E.stl reward-system.scad
+openscad -D "part=\""name\"";letter=\""I\"";printer=\""bambu\""" -o ../../stl/misc/reward-system/bambu_reward-system-name-I.stl reward-system.scad
+openscad -D "part=\""name\"";letter=\""N\"";printer=\""bambu\""" -o ../../stl/misc/reward-system/bambu_reward-system-name-N.stl reward-system.scad
+openscad -D "part=\""name\"";letter=\""T\"";printer=\""bambu\""" -o ../../stl/misc/reward-system/bambu_reward-system-name-T.stl reward-system.scad
+
 openscad -D "part=\""reward\"";printer=\""bambu\""" -o ../../stl/misc/reward-system/bambu_reward-system-reward.stl reward-system.scad
 openscad -D "part=\""reward-extra\"";printer=\""bambu\""" -o ../../stl/misc/reward-system/bambu_reward-system-reward-extra.stl reward-system.scad
 
