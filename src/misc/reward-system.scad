@@ -12,7 +12,7 @@ echo("$brick_printer_adjustments", printer, $brick_printer_adjustments);
 
 tightness = BRICK_TIGHTNESS_DEFAULT;
 
-part = "reward";
+part = "reward-20x";
 
 age = 9;
 letter = "A";
@@ -73,6 +73,14 @@ else if (part == "reward-extra")
   is_tile = false;
   brick(width, length, height, is_closed = is_closed, is_tile = is_tile, anchor = BOT, $tightness = tightness);
 }
+else if (part == "reward-10x")
+{
+  create_reward_brick_with_text("10");
+}
+else if (part == "reward-20x")
+{
+  create_reward_brick_with_text("20");
+}
 else if (part == "reward-cylinder")
 {
   // Alternative proposition that is not in use.
@@ -95,6 +103,20 @@ else if (part == "reward-cylinder")
 
 module create_letter(text, size, height)
 {
-  font = "Liberation Mono:style=Bold";
+  // font = "Liberation Mono:style=Bold";
+  font = "Arial:style=Bold";
   linear_extrude(height = height) { text(text, size = size, font = font, halign = "center", valign = "center", $fn = 16); }
+}
+
+module create_reward_brick_with_text(text)
+{
+  width = 2;
+  length = size_reward;
+  height = reward_height * 2;
+  is_closed = false;
+  is_tile = false;
+  physical_length = BRICK_CALCULATE_PHYSICAL_LENGTH(length);
+  physical_height = BRICK_CALCULATE_PHYSICAL_HEIGHT(height);
+  brick(width, length, height, is_closed = is_closed, is_tile = is_tile, anchor = BOT, $tightness = tightness);
+  up(physical_height / 2) fwd(physical_length / 2) xrot(90) create_letter(text, 8, 0.4);
 }
