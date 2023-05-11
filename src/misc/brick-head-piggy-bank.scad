@@ -7,7 +7,6 @@ include<BOSL2\threading.scad>;
 // clang-format on
 
 $fn = $preview ? 32 : 200;
-
 multiplier = 10;
 
 d = 10.11 * multiplier;
@@ -32,13 +31,30 @@ face_template_d = d + face_template_thickness;
 
 pitch = 3.5;
 
-lid();
+// tube(od = bottom_od, id = bottom_id, h = 5, anchor = BOT);
+
+// lid();
+hair();
+// head();
+module hair()
+{
+  hair_scale = 10.1;
+  difference()
+  {
+    xrot(90) scale([ hair_scale, hair_scale, hair_scale ]) import("brick-head-hair-kai.stl");
+    down(5) cyl(d = bottom_od + 10, h = top_h * 3 + 10, anchor = BOT);
+  }
+  tube(od = bottom_od, id = bottom_id + 0.5, h = bottom_h * 3 + 7, anchor = BOT);
+}
 
 module lid()
 {
-  diff() threaded_rod(d = bottom_id, l = bottom_h, pitch = pitch, anchor = BOTTOM) { #tag("remove") attach(TOP) cuboid([ slot_x, slot_y, 9 ], anchor = TOP); }
-}
 
+  diff() threaded_rod(d = bottom_id - 0.8, l = bottom_h, pitch = pitch, anchor = BOTTOM)
+  {
+    tag("remove") attach(TOP) cuboid([ slot_x, slot_y, 9 ], anchor = TOP);
+  }
+}
 module head()
 {
 
